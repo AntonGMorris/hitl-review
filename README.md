@@ -8,7 +8,7 @@
 
 Wrap an AI output with one function call. Set a confidence threshold. Anything below it lands in a review queue where a human approves, rejects, or edits before it reaches your customer. Anything above passes through untouched. Zero native dependencies, works out of the box, self-hosts anywhere Node runs.
 
-> **Status: alpha (v0.1).** Core queue, JSON-file + in-memory storage, console + Slack-webhook notifiers, reviewer CLI. Postgres backend, web review UI, and per-reviewer analytics on the roadmap.
+> **Status: v0.2.** Core queue, JSON-file + in-memory storage, console + Slack-webhook notifiers, reviewer CLI, **and a zero-dependency web dashboard** (`npx hitl-review serve`). Postgres backend and per-reviewer analytics still on the roadmap.
 
 ---
 
@@ -79,6 +79,19 @@ npx hitl-review reject r_abc123 --reason "hallucinated a fact"
 ```
 
 Every decision is timestamped and includes the reviewer identity (`$USER` by default, or `--reviewer someone@team`).
+
+## Web dashboard
+
+If you'd rather review in a browser than a terminal:
+
+```bash
+npx hitl-review serve
+# → hitl-review dashboard listening at http://127.0.0.1:3737
+```
+
+Opens a small vanilla-JS SPA (no build step, no framework) served by a stdlib-only Node HTTP server — zero extra dependencies. Filter by status, inspect any item, and approve / edit / reject with the same semantics as the CLI. Every decision writes to the same `hitl.db.json` file the CLI uses, so the two are interchangeable.
+
+**Security note.** The server binds to `127.0.0.1` by default (loopback only) and has **no authentication**. If you want to expose it beyond your machine, put it behind a reverse proxy that handles auth — don't `--host 0.0.0.0` on the internet.
 
 ## Example — reviewer flow
 

@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here. Follows [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] — 2026-07-18
+
+### Added
+- **Web dashboard** (`npx hitl-review serve`) — a small vanilla-JS SPA served by a stdlib-only Node HTTP server. Zero new dependencies. Same semantics as the CLI (list, show, approve, edit, reject) with the same underlying storage.
+- `startServer` / `startFromFile` exported from the main entrypoint for programmatic embedding.
+- `hitl-review serve` CLI command with `--port` and `--host` flags. Binds to `127.0.0.1` by default; explicit warning printed when bound to a public interface.
+- Vitest suite for the server (10 tests) covering list filtering, get/decide flows, double-decide rejection, and static HTML serving.
+
+### Changed
+- Package now ships `public/` (HTML + CSS + JS assets for the dashboard) in the published tarball.
+
 ## [0.1.1] — 2026-07-18
 
 ### Fixed
