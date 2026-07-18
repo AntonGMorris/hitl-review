@@ -78,6 +78,22 @@ npx hitl-review reject r_abc123 --reason "hallucinated a fact"
 
 Every decision is timestamped and includes the reviewer identity (`$USER` by default, or `--reviewer someone@team`).
 
+## Example — reviewer flow
+
+```
+$ npx hitl-review list
+id           system              confidence  created
+-----------  ------------------  ----------  --------------------
+r_9k2f7a     email-drafter       0.72        2026-07-18T14:22:05Z
+r_8mp3b1     support-summariser  0.61        2026-07-18T14:19:41Z
+r_7nq0c8     invoice-extractor   0.58        2026-07-18T14:17:03Z
+
+$ npx hitl-review edit r_9k2f7a --output "Hi Bethan, that Thursday slot works — booked."
+edited + approved r_9k2f7a (by sarah)
+```
+
+Every action is stored with the original AI output, the revised (if edited), the reviewer, and a timestamp. Full trail of what the AI proposed vs. what actually went out.
+
 ## Storage adapters
 
 Two ship in v0.1:
