@@ -21,7 +21,7 @@ Every AI project hits the same problem: the model is 90% right, and the 10% you 
 ## Install
 
 ```bash
-npm install hitl-review
+npm install @antongmorris/hitl-review
 ```
 
 Requires Node.js 20+.
@@ -29,7 +29,7 @@ Requires Node.js 20+.
 ## Quick start
 
 ```ts
-import { HitlQueue, FileStore, SlackNotifier } from "hitl-review";
+import { HitlQueue, FileStore, SlackNotifier } from "@antongmorris/hitl-review";
 
 const queue = new HitlQueue({
   storage: new FileStore("./hitl.db.json"),
