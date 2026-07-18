@@ -1,6 +1,6 @@
 {
   "name": "hitl-review",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Drop-in human-in-the-loop review queue for any AI system. Wrap an output, set a confidence threshold, get approval, rejection, or edit before it reaches your customer.",
   "type": "module",
   "license": "MIT",

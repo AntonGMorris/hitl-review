@@ -126,6 +126,20 @@ Bring your own: implement `notify(item)`. Email (Resend/Sendgrid) and SMS (Twili
 - v0.1 has no built-in review UI. You either use the CLI or build a UI on top of the storage interface. The React UI ships in v0.2.
 - No auth on the CLI — `--reviewer` is trusted. If you need signed reviewer identity, wire your own check on top or wait for v0.2 dashboard auth.
 
+## Part of the AI-governance stack
+
+This repo is one of five that ship together as a coherent AI-governance stack. Each is standalone; they compose.
+
+| Repo | What it is |
+|---|---|
+| [`companies-house-mcp`](https://github.com/AntonGMorris/companies-house-mcp) | Production-grade MCP server for the UK Companies House API. |
+| [`prompt-injection-lab`](https://github.com/AntonGMorris/prompt-injection-lab) | Automated red-team suite. Fires known injection payloads at any AI endpoint. |
+| [`hitl-review`](https://github.com/AntonGMorris/hitl-review) | **You are here.** Drop-in human-in-the-loop review queue. |
+| [`audit-log-llm`](https://github.com/AntonGMorris/audit-log-llm) | GDPR-friendly structured audit logging for LLM calls. |
+| [`lead-qual-agent`](https://github.com/AntonGMorris/lead-qual-agent) | Example agent that composes all of the above. |
+
+Built and maintained by [Anton Morris](https://antonmorris.co.uk).
+
 ## License
 
 MIT. See `LICENSE`.

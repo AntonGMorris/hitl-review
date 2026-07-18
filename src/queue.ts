@@ -6,7 +6,13 @@ import type { ReviewStore } from "./storage/base.js";
 import type { Decision, ReviewItem, SubmitInput, SubmitResult } from "./types.js";
 
 export interface HitlQueueOptions {
-  /** Auto-approve when confidence ≥ threshold. Defaults to 0.85. */
+  /**
+   * Auto-approve when confidence ≥ threshold. Defaults to 0.85.
+   *
+   * Passing a value > 1 (e.g. `Infinity`) routes every submission to the
+   * review queue regardless of confidence — useful for high-stakes agents
+   * where a human always signs off.
+   */
   threshold?: number;
   /** Where review items live. Defaults to a MemoryStore. */
   storage?: ReviewStore;
@@ -26,8 +32,11 @@ export class HitlQueue {
   private readonly idGen: () => string;
 
   constructor(opts: HitlQueueOptions = {}) {
-    if (opts.threshold !== undefined && (opts.threshold < 0 || opts.threshold > 1)) {
-      throw new Error(`threshold must be between 0 and 1, got ${opts.threshold}`);
+    if (
+      opts.threshold !== undefined &&
+      (opts.threshold < 0 || Number.isNaN(opts.threshold))
+    ) {
+      throw new Error(`threshold must be >= 0 (got ${opts.threshold})`);
     }
     this.threshold = opts.threshold ?? 0.85;
     this.storage = opts.storage ?? new MemoryStore();
