@@ -21,8 +21,10 @@ Every AI project hits the same problem: the model is 90% right, and the 10% you 
 ## Install
 
 ```bash
-npm install @antonmorris/hitl-review
+npm install github:AntonGMorris/hitl-review
 ```
+
+_Publishing to npm as `@antonmorris/hitl-review` is planned — for now use the git URL above, which npm installs directly from GitHub._
 
 Requires Node.js 20+.
 
