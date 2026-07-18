@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { HitlQueue } from "./queue.js";
+import { startFromFile } from "./server.js";
 import { FileStore } from "./storage/file.js";
 import type { ReviewItem } from "./types.js";
 
@@ -10,6 +11,12 @@ async function main(): Promise<void> {
   if (!command || command === "help" || command === "--help" || command === "-h") {
     printHelp();
     return;
+  }
+
+  // `serve` is special — it doesn't need the shared queue instance, since
+  // startFromFile constructs its own around the shared storage file.
+  if (command === "serve") {
+    return serveCmd(parseArgs(rest));
   }
 
   const queue = new HitlQueue({ storage: new FileStore(DEFAULT_DB) });
@@ -41,10 +48,24 @@ Usage:
   hitl-review approve <id> [--reviewer name]
   hitl-review edit    <id> --output "..."      [--reviewer name]
   hitl-review reject  <id> [--reason "..."]    [--reviewer name]
+  hitl-review serve   [--port 3737] [--host 127.0.0.1]
+      Launches the review dashboard at http://<host>:<port>.
+      Binds to loopback by default — pass --host 0.0.0.0 to expose (no auth).
 
 Storage path: HITL_DB env (default: ./hitl.db.json)
 Reviewer identity defaults to $USER or 'anonymous'.
 `);
+}
+
+async function serveCmd(args: Record<string, string>): Promise<void> {
+  const port = args.port ? Number(args.port) : 3737;
+  const host = args.host ?? "127.0.0.1";
+  const started = await startFromFile(DEFAULT_DB, { port, host });
+  console.log(`hitl-review dashboard listening at ${started.url}`);
+  console.log(`  db: ${DEFAULT_DB}`);
+  if (host !== "127.0.0.1" && host !== "localhost") {
+    console.log(`  ! bound to ${host} — no auth, do not expose to the internet.`);
+  }
 }
 
 async function listCmd(queue: HitlQueue, args: Record<string, string>): Promise<void> {

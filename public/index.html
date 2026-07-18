@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>hitl-review · dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <div class="brand">hitl-review</div>
+    <div class="filters">
+      <button data-status="pending" class="active">pending</button>
+      <button data-status="approved">approved</button>
+      <button data-status="rejected">rejected</button>
+    </div>
+    <div id="reviewer-slot">
+      reviewer: <input id="reviewer" type="text" placeholder="you@team" value="dashboard">
+    </div>
+  </header>
+
+  <main>
+    <aside id="list">
+      <div class="list-empty">Loading…</div>
+    </aside>
+    <section id="detail">
+      <div class="detail-empty">Select an item on the left.</div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

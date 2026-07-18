@@ -1,5 +1,11 @@
 export { HitlQueue, type HitlQueueOptions } from "./queue.js";
 export {
+  startServer,
+  startFromFile,
+  type ServeOptions,
+  type StartedServer,
+} from "./server.js";
+export {
   FileStore,
   MemoryStore,
   type ReviewStore,
