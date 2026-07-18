@@ -1,0 +1,59 @@
+{
+  "name": "hitl-review",
+  "version": "0.1.0",
+  "description": "Drop-in human-in-the-loop review queue for any AI system. Wrap an output, set a confidence threshold, get approval, rejection, or edit before it reaches your customer.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Anton Morris",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AntonGMorris/hitl-review.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AntonGMorris/hitl-review/issues"
+  },
+  "homepage": "https://github.com/AntonGMorris/hitl-review#readme",
+  "keywords": [
+    "hitl",
+    "human-in-the-loop",
+    "review",
+    "governance",
+    "ai",
+    "llm",
+    "safety",
+    "moderation"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "hitl-review": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.17.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  }
+}
