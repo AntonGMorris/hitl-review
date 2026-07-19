@@ -17,7 +17,21 @@ async function fetchList() {
   const res = await fetch(`/api/items?status=${state.status}`);
   const body = await res.json();
   state.items = body.items || [];
+  // Sort most-recent first — the API returns insertion order, but pending
+  // review is inherently a "newest first" workflow.
+  state.items.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
   renderList();
+
+  // Auto-select behaviour: honour ?open=<id> from the URL on initial load,
+  // otherwise select the first item so the reviewer doesn't stare at an empty
+  // detail pane. Do nothing if the reviewer has already picked something.
+  if (!state.selectedId && state.items.length > 0) {
+    const wanted = new URLSearchParams(window.location.search).get("open");
+    const target = wanted && state.items.find((i) => i.id === wanted) ? wanted : state.items[0].id;
+    state.selectedId = target;
+    renderList();
+    fetchDetail(target);
+  }
 }
 
 async function fetchDetail(id) {
