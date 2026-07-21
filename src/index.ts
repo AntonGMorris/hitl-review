@@ -8,6 +8,9 @@ export {
 export {
   FileStore,
   MemoryStore,
+  SqliteStore,
+  sqliteAvailable,
+  openStore,
   type ReviewStore,
 } from "./storage/index.js";
 export {

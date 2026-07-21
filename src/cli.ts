@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { HitlQueue } from "./queue.js";
 import { startFromFile } from "./server.js";
-import { FileStore } from "./storage/file.js";
+import { openStore } from "./storage/index.js";
 import type { ReviewItem } from "./types.js";
 
 const DEFAULT_DB = process.env.HITL_DB ?? "./hitl.db.json";
@@ -19,7 +19,7 @@ async function main(): Promise<void> {
     return serveCmd(parseArgs(rest));
   }
 
-  const queue = new HitlQueue({ storage: new FileStore(DEFAULT_DB) });
+  const queue = new HitlQueue({ storage: openStore(DEFAULT_DB) });
 
   switch (command) {
     case "list":
@@ -53,6 +53,8 @@ Usage:
       Binds to loopback by default — pass --host 0.0.0.0 to expose (no auth).
 
 Storage path: HITL_DB env (default: ./hitl.db.json)
+  *.json  → atomic JSON file store
+  *.db / *.sqlite → SQLite store (Node >= 22.5, built-in node:sqlite)
 Reviewer identity defaults to $USER or 'anonymous'.
 `);
 }

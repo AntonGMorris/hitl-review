@@ -4,7 +4,7 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { HitlQueue } from "./queue.js";
-import { FileStore } from "./storage/file.js";
+import { openStore } from "./storage/index.js";
 import type { Decision, ReviewItem } from "./types.js";
 
 export interface ServeOptions {
@@ -58,9 +58,9 @@ export function startServer(opts: ServeOptions): Promise<StartedServer> {
   });
 }
 
-/** Convenience: open a FileStore, wrap in a queue, start the server. */
+/** Convenience: open a store for the path (JSON or SQLite by extension), wrap in a queue, start the server. */
 export async function startFromFile(dbPath: string, opts: { port?: number; host?: string } = {}): Promise<StartedServer> {
-  const queue = new HitlQueue({ storage: new FileStore(dbPath) });
+  const queue = new HitlQueue({ storage: openStore(dbPath) });
   return startServer({ queue, ...opts });
 }
 

@@ -8,7 +8,7 @@
 
 Wrap an AI output with one function call. Set a confidence threshold. Anything below it lands in a review queue where a human approves, rejects, or edits before it reaches your customer. Anything above passes through untouched. Zero native dependencies, works out of the box, self-hosts anywhere Node runs.
 
-> **Status: v0.2.** Core queue, JSON-file + in-memory storage, console + Slack-webhook notifiers, reviewer CLI, **and a zero-dependency web dashboard** (`npx hitl-review serve`). Postgres backend and per-reviewer analytics still on the roadmap.
+> **Status: v0.3.** Core queue, SQLite + JSON-file + in-memory storage, console + Slack-webhook notifiers, reviewer CLI, **and a zero-dependency web dashboard** (`npx hitl-review serve`). Per-reviewer analytics still on the roadmap.
 
 ---
 
@@ -111,12 +111,15 @@ Every action is stored with the original AI output, the revised (if edited), the
 
 ## Storage adapters
 
-Two ship in v0.1:
+Three ship built-in:
 
 - **`MemoryStore`** — everything in-process. Good for tests and single-run scripts.
-- **`FileStore("./hitl.db.json")`** — atomic JSON file with per-write flush. Good for single-instance deployments up to a few thousand items. Zero native dependencies.
+- **`FileStore("./hitl.db.json")`** — atomic JSON file with per-write flush. Good for single-instance deployments up to a few thousand items.
+- **`SqliteStore("./hitl.db")`** — real database persistence via Node's built-in `node:sqlite` (Node ≥ 22.5). WAL mode, indexed status queries, survives restarts, safe under concurrent dashboard writes. Still zero dependencies — nothing native to compile.
 
-Bring your own by implementing the `ReviewStore` interface (three methods: `save`, `get`, `list`). Postgres and Redis adapters land in v0.2.
+The CLI and `startFromFile` pick the backend by extension: `.json` → FileStore, `.db`/`.sqlite` → SqliteStore. Set `HITL_DB=./hitl.db` and you're on SQLite.
+
+Bring your own by implementing the `ReviewStore` interface (three methods: `save`, `get`, `list`). Postgres and Redis adapters land in a future release.
 
 ## Notifier adapters
 
@@ -146,16 +149,15 @@ Bring your own: implement `notify(item)`. Email (Resend/Sendgrid) and SMS (Twili
 
 ## Roadmap
 
-- **v0.2** — Postgres storage adapter + a small React review-queue UI.
-- **v0.3** — Email (Resend) + SMS (Twilio) notifiers.
-- **v0.4** — Per-reviewer analytics (avg time, approval rate, edit distance).
-- **v0.5** — Webhook callback on decision so upstream agents can resume automatically.
+- **v0.4** — Email (Resend) + SMS (Twilio) notifiers.
+- **v0.5** — Per-reviewer analytics (avg time, approval rate, edit distance).
+- **v0.6** — Webhook callback on decision so upstream agents can resume automatically.
 
 ## Honest caveats
 
-- The `FileStore` is fine for single-instance deployments. Multi-instance needs Postgres — coming in v0.2.
-- v0.1 has no built-in review UI. You either use the CLI or build a UI on top of the storage interface. The React UI ships in v0.2.
-- No auth on the CLI — `--reviewer` is trusted. If you need signed reviewer identity, wire your own check on top or wait for v0.2 dashboard auth.
+- `SqliteStore` covers single-host deployments properly; multi-instance across hosts still wants Postgres.
+- `SqliteStore` needs Node ≥ 22.5 (it uses the built-in `node:sqlite`). On Node 20, use `FileStore`.
+- No auth on the CLI or dashboard — `--reviewer` is trusted. If you need signed reviewer identity, wire your own check on top.
 
 ## Part of the AI-governance stack
 
